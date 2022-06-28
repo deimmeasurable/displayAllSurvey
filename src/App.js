@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Table from './components/Table';
 
 function App() {
+  const [dataTable, setDataTable] = useState([' '])
+
+  useEffect(() => {
+    axios('http://localhost:8000/api/displaysurvey')
+    .then(res => setDataTable(res.data))
+    .catch(err => console.log(err))
+  }, [])
+  console.log(dataTable);
+
+  const column = [
+    {heading: 'Name', value:'name'},
+    {heading: 'Country', value:'country'},
+    {heading: 'Email', value:'email'},
+    {ratings:'Ratings', value:'ratings'},
+  ]
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <h1>Display data</h1>
+      <Table data={dataTable} column={column} />
     </div>
   );
 }
